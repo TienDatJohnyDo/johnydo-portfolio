@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Johny Do</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:   #FEFCFF;
+      --lav-50:  #F7F3FF;
+      --lav-100: #EEE6FF;
+      --lav-200: #D9C8FF;
+      --lav-300: #BFA3F5;
+      --lav-400: #A07EE8;
+      --lav-500: #7C55D4;
+      --lav-600: #5E3BB0;
+      --ink:     #1C1630;
+      --ink-mid: #4A3D6B;
+      --ink-soft:#8577A8;
+      --border:  rgba(160, 126, 232, 0.14);
+      --card-bg: rgba(255,255,255,0.85);
+      --nav-bg:  rgba(254,252,255,0.82);
+      --exp-bg:  #F7F3FF;
+    }
+
+    html.dark {
+      --white:   #110D1C;
+      --lav-50:  #1A1430;
+      --lav-100: #231B3A;
+      --lav-200: #332650;
+      --lav-300: #6B4DB8;
+      --lav-400: #A07EE8;
+      --lav-500: #B99AFF;
+      --lav-600: #D4BAFF;
+      --ink:     #EDE8FF;
+      --ink-mid: #C4B8E8;
+      --ink-soft:#7A6EA0;
+      --border:  rgba(160, 126, 232, 0.22);
+      --card-bg: rgba(26, 20, 48, 0.92);
+      --nav-bg:  rgba(17, 13, 28, 0.9);
+      --exp-bg:  #160F28;
+    }
+
+    *, *::before, *::after { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* soft background blobs */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 40% at 90% 10%, rgba(191,163,245,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 45% at 5% 85%, rgba(217,200,255,0.12) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3.5rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--ink-soft); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--lav-500); }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      width: 44px; height: 26px;
+      background: var(--lav-100);
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: background 0.3s;
+      outline: none;
+      padding: 0;
+    }
+
+    .theme-toggle:hover { border-color: var(--lav-300); }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      line-height: 1;
+    }
+
+    html.dark .theme-toggle { background: var(--lav-200); }
+    html.dark .toggle-thumb { transform: translateX(18px); background: var(--lav-50); }
+
+    /* ── THEME TOGGLE ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      align-items: center;
+      gap: 4rem;
+      padding: 9rem 3.5rem 5rem;
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .hero-left { }
+
+    .hero-greeting {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--lav-400);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      animation: rise 0.6s 0.1s ease forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: rise 0.6s 0.2s ease forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--lav-500);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: rise 0.6s 0.35s ease forwards;
+    }
+
+    .hero-chips {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 2.25rem;
+      opacity: 0;
+      animation: rise 0.6s 0.45s ease forwards;
+    }
+
+    .chip {
+      background: var(--lav-100);
+      color: var(--lav-600);
+      padding: 0.3rem 0.85rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--ink);
+      color: white;
+      padding: 0.8rem 1.75rem;
+      border-radius: 100px;
+      font-size: 0.9rem; font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+      opacity: 0;
+      animation: rise 0.6s 0.55s ease forwards;
+    }
+    .hero-cta:hover {
+      background: var(--lav-600);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(94,59,176,0.25);
+    }
+
+    /* profile card */
+    .profile-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(124,85,212,0.09);
+      position: relative;
+      opacity: 0;
+      animation: rise 0.7s 0.3s ease forwards;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 5px;
+      border-radius: 28px 28px 0 0;
+      background: linear-gradient(90deg, var(--lav-200), var(--lav-400), var(--lav-200));
+    }
+
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--lav-200), var(--lav-400));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 2.5rem; color: white;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 4px 20px rgba(124,85,212,0.25);
+    }
+
+    .profile-card h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    .profile-card .role {
+      font-size: 0.85rem;
+      color: var(--lav-400);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-facts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      text-align: left;
+      margin-bottom: 1.75rem;
+    }
+
+    .fact {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--ink-mid);
+    }
+
+    .fact-icon {
+      width: 32px; height: 32px;
+      background: var(--lav-50);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .socials {
+      display: flex; gap: 0.6rem; justify-content: center;
+    }
+
+    .social-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      border-color: var(--lav-300);
+      background: var(--lav-50);
+      color: var(--lav-600);
+      transform: translateY(-2px);
+    }
+
+    /* ── SHARED SECTION STYLES ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 3.5rem;
+      position: relative; z-index: 1;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lav-400);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-heading {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-heading em { font-style: italic; color: var(--lav-500); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-text strong { color: var(--ink); font-weight: 600; }
+
+    .about-aside { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .aside-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 2px 16px rgba(124,85,212,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .aside-card:hover { box-shadow: 0 6px 28px rgba(124,85,212,0.12); }
+
+    .aside-card-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+
+    .aside-card h4 {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .aside-card p {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-section { background: var(--exp-bg); }
+
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--lav-400);
+      padding-top: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .timeline-body { }
+
+    .timeline-role {
+      font-family: 'Lora', serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin-bottom: 0.1rem;
+    }
+
+    .timeline-company {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--lav-500);
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-body p {
+      font-size: 0.925rem;
+      color: var(--ink-mid);
+      line-height: 1.75;
+    }
+
+    .timeline-tags {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      margin-top: 0.85rem;
+    }
+
+    .timeline-tag {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--lav-500);
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .edu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 2px 16px rgba(124,85,212,0.06);
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .edu-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--lav-300), var(--lav-500));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .edu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(124,85,212,0.12);
+    }
+
+    .edu-year {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--lav-400);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .edu-card h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .edu-card p {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.28s;
+      box-shadow: 0 2px 16px rgba(124,85,212,0.05);
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 40px rgba(124,85,212,0.14);
+      border-color: var(--lav-200);
+    }
+
+    .project-thumb {
+      height: 130px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+    }
+
+    .pt-purple { background: linear-gradient(135deg, var(--lav-100), var(--lav-200)); }
+    .pt-blue   { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); }
+    .pt-rose   { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+    .pt-mint   { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+
+    .project-type {
+      position: absolute; bottom: 0.75rem; right: 0.75rem;
+      background: white;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ink-mid);
+      text-transform: uppercase;
+    }
+
+    .project-body { padding: 1.5rem; }
+
+    .project-body h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .project-body p {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .project-stack {
+      display: flex; flex-wrap: wrap; gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .stack-pill {
+      background: var(--lav-50);
+      border: 1px solid var(--lav-100);
+      color: var(--lav-500);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+    }
+
+    .project-links { display: flex; gap: 1rem; }
+    .proj-link {
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--lav-500); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .proj-link:hover { color: var(--lav-600); }
+
+    /* ── CONTACT ── */
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .contact-text p {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .contact-email {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--ink);
+      color: white;
+      padding: 0.85rem 1.75rem;
+      border-radius: 100px;
+      font-size: 0.875rem; font-weight: 600;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      transition: all 0.25s;
+    }
+    .contact-email:hover {
+      background: var(--lav-600);
+      transform: translateY(-2px);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(124,85,212,0.05);
+    }
+    .contact-link-card:hover {
+      border-color: var(--lav-200);
+      transform: translateX(4px);
+      box-shadow: 0 6px 24px rgba(124,85,212,0.1);
+    }
+
+    .contact-link-icon {
+      width: 42px; height: 42px;
+      background: var(--lav-50);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-link-text strong {
+      display: block;
+      font-size: 0.875rem; font-weight: 600;
+      color: var(--ink);
+    }
+
+    .contact-link-text span {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 3.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; }
+      .profile-card { max-width: 360px; }
+      .section { padding: 4.5rem 1.5rem; }
+      .about-grid,
+      .contact-inner,
+      .edu-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.4rem; }
+      footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-name" href="#">Johny Do</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span class="toggle-thumb" id="toggleIcon">☀️</span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-greeting">Hey there, I'm</p>
+      <h1>Johny Do.<br><em>Data & Software</em><br>enthusiast.</h1>
+      <p class="hero-sub">
+        Recent Software Engineering grad from the University of Calgary, with a passion for turning data into decisions and building thoughtful digital experiences.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">📊 Data Analytics</span>
+        <span class="chip">💻 Software Engineering</span>
+        <span class="chip">🏐 Volleyball player</span>
+        <span class="chip">🎬 YouTuber</span>
+      </div>
+      <a href="#contact" class="hero-cta">Say hello →</a>
+    </div>
+
+    <div class="profile-card">
+      <div class="avatar">J</div>
+      <h2>Johny Do</h2>
+      <p class="role">Software Engineer · Calgary, AB</p>
+      <div class="profile-facts">
+        <div class="fact">
+          <div class="fact-icon">🎓</div>
+          <span>B.Sc. Software Engineering, U of C</span>
+        </div>
+        <div class="fact">
+          <div class="fact-icon">🏦</div>
+          <span>Former Data Analyst @ CIBC</span>
+        </div>
+        <div class="fact">
+          <div class="fact-icon">🤖</div>
+          <span>Former PM Intern @ H&R Block</span>
+        </div>
+        <div class="fact">
+          <div class="fact-icon">🏐</div>
+          <span>Volleyball league Wed & Sun</span>
+        </div>
+      </div>
+      <div class="socials">
+        <a class="social-btn" href="#" title="GitHub">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a class="social-btn" href="#" title="LinkedIn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a class="social-btn" href="#" title="YouTube">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        </a>
+        <a class="social-btn" href="mailto:johny@example.com" title="Email">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="fade-in">
+      <p class="section-label">A bit about me</p>
+      <h2 class="section-heading">More than just a<br><em>résumé.</em></h2>
+    </div>
+    <div class="about-grid fade-in">
+      <div class="about-text">
+        <p>
+          I graduated from the <strong>University of Calgary</strong> in May 2024 with a Bachelor of Science in Software Engineering. My time there gave me a solid foundation in problem-solving, software development, and data analysis — but honestly, the projects and internships taught me just as much.
+        </p>
+        <p>
+          During my internship at <strong>CIBC</strong>, I delivered daily reports and conducted in-depth data analysis for senior leadership, helping drive strategic decisions through actionable insights. At <strong>H&R Block</strong>, I led the AI chatbot project for the DIY Tax software team — designing conversation flows, analysing customer data, and collaborating across teams to improve the user experience.
+        </p>
+        <p>
+          Outside of tech, I'm a big believer in staying active. I play in a <strong>volleyball league every Wednesday and Sunday</strong> — I love the competitive energy and getting to have fun with friends. I even film our matches and post them on YouTube!
+        </p>
+        <p>
+          Looking ahead, I'm excited to channel my technical and analytical skills into a <strong>data analytics role</strong>, where I can help teams make smarter, data-informed decisions.
+        </p>
+      </div>
+
+      <div class="about-aside">
+        <div class="aside-card">
+          <div class="aside-card-icon">📍</div>
+          <h4>Based in Calgary, AB</h4>
+          <p>Open to remote and in-person opportunities across Canada.</p>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-icon">🎯</div>
+          <h4>Looking for</h4>
+          <p>Data analytics or software engineering roles where I can grow and make an impact.</p>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-icon">🏐</div>
+          <h4>Beyond the screen</h4>
+          <p>Volleyball twice a week, filming matches, and uploading to YouTube. Sport keeps me sane!</p>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-icon">🎓</div>
+          <h4>Always learning</h4>
+          <p>Currently deepening my skills in data engineering and analytics tooling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EXPERIENCE -->
+  <section class="section exp-section" id="experience">
+    <div class="fade-in">
+      <p class="section-label">Where I've worked</p>
+      <h2 class="section-heading">My <em>experience.</em></h2>
+    </div>
+    <div class="timeline fade-in">
+
+      <div class="timeline-item">
+        <div class="timeline-date">Apr 2023 –<br>Aug 2023</div>
+        <div class="timeline-body">
+          <div class="timeline-role">Product Management Intern</div>
+          <div class="timeline-company">H&R Block Canada</div>
+          <p>Led the AI chatbot project for the DIY Tax software team. Designed and implemented conversation flows, analysed customer data, and collaborated with cross-functional teams to meaningfully improve the overall user experience.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Product Management</span>
+            <span class="timeline-tag">AI / Chatbot</span>
+            <span class="timeline-tag">UX Analysis</span>
+            <span class="timeline-tag">Cross-functional collab</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">May 2022 –<br>Dec 2022</div>
+        <div class="timeline-body">
+          <div class="timeline-role">Data Analyst Intern</div>
+          <div class="timeline-company">CIBC Canada</div>
+          <p>Provided daily reports and conducted in-depth data analysis for senior leadership. Translated complex data into clear, actionable insights that supported strategic decision-making across the organisation.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Data Analysis</span>
+            <span class="timeline-tag">Reporting</span>
+            <span class="timeline-tag">SQL</span>
+            <span class="timeline-tag">Excel / Dashboards</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EDUCATION -->
+  <section class="section" id="education">
+    <div class="fade-in">
+      <p class="section-label">Where I studied</p>
+      <h2 class="section-heading">My <em>education.</em></h2>
+    </div>
+    <div class="edu-grid fade-in">
+      <div class="edu-card">
+        <div class="edu-year">Graduated May 2024</div>
+        <h3>Bachelor of Software Engineering</h3>
+        <p>University of Calgary</p>
+      </div>
+      <div class="edu-card">
+        <div class="edu-year">Graduated June 2019</div>
+        <h3>High School Diploma</h3>
+        <p>Western Canada High School</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="fade-in">
+      <p class="section-label">Things I've made</p>
+      <h2 class="section-heading">Recent <em>projects.</em></h2>
+    </div>
+    <div class="projects-grid fade-in">
+
+      <div class="project-card">
+        <div class="project-thumb pt-purple">
+          🤖
+          <span class="project-type">Full-stack</span>
+        </div>
+        <div class="project-body">
+          <h3>Prompt Share App</h3>
+          <p>A full-stack prompt sharing app built with Next.js 13. Features CRUD, Google auth, and a glassmorphism UI design backed by MongoDB.</p>
+          <div class="project-stack">
+            <span class="stack-pill">Next.js</span>
+            <span class="stack-pill">MongoDB</span>
+            <span class="stack-pill">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">Live demo ↗</a>
+            <a href="#" class="proj-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb pt-blue">
+          📊
+          <span class="project-type">Data Analysis</span>
+        </div>
+        <div class="project-body">
+          <h3>Heart Health Analytics</h3>
+          <p>Exploratory data analysis on patient heart health data — visualising the effects of age, gender, blood pressure, and cholesterol.</p>
+          <div class="project-stack">
+            <span class="stack-pill">Python</span>
+            <span class="stack-pill">Pandas</span>
+            <span class="stack-pill">Matplotlib</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">Notebook ↗</a>
+            <a href="#" class="proj-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb pt-rose">
+          🏠
+          <span class="project-type">Dashboard</span>
+        </div>
+        <div class="project-body">
+          <h3>Real Estate Dashboard</h3>
+          <p>MERN stack admin dashboard with full CRUD, Google auth, pagination, sorting, and filtering for real-estate listings.</p>
+          <div class="project-stack">
+            <span class="stack-pill">React</span>
+            <span class="stack-pill">Node.js</span>
+            <span class="stack-pill">MongoDB</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">Live demo ↗</a>
+            <a href="#" class="proj-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb pt-mint">
+          🌐
+          <span class="project-type">Landing page</span>
+        </div>
+        <div class="project-body">
+          <h3>Cognito AI Website</h3>
+          <p>Full-stack website for an AI company featuring animated Three.js elements, Framer Motion transitions, and a striking visual identity.</p>
+          <div class="project-stack">
+            <span class="stack-pill">Next.js</span>
+            <span class="stack-pill">Three.js</span>
+            <span class="stack-pill">TypeScript</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">Live demo ↗</a>
+            <a href="#" class="proj-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="contact-inner fade-in">
+      <div class="contact-text">
+        <p class="section-label">Reach out</p>
+        <h2 class="section-heading">Let's <em>connect.</em></h2>
+        <p>
+          I'm always happy to chat — whether it's a new opportunity, a collaboration idea, or just a friendly hello. Don't be shy!
+        </p>
+        <p>
+          You can find me most active on LinkedIn, or just shoot me an email directly.
+        </p>
+        <a href="mailto:hello@johnydo.com" class="contact-email">✉ Send me an email</a>
+      </div>
+
+      <div class="contact-links">
+        <a href="#" class="contact-link-card">
+          <div class="contact-link-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <strong>LinkedIn</strong>
+            <span>Let's connect professionally</span>
+          </div>
+        </a>
+        <a href="#" class="contact-link-card">
+          <div class="contact-link-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <strong>GitHub</strong>
+            <span>See what I've been building</span>
+          </div>
+        </a>
+        <a href="#" class="contact-link-card">
+          <div class="contact-link-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <strong>YouTube</strong>
+            <span>Watch our volleyball matches!</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 Johny Do</span>
+    <span>Made with care in Calgary 🍁</span>
+  </footer>
+
+  <script>
+    // ── DARK MODE ──
+    const toggle = document.getElementById('themeToggle');
+    const icon   = document.getElementById('toggleIcon');
+    const html   = document.documentElement;
+
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+      icon.textContent = '🌙';
+    }
+
+    toggle.addEventListener('click', () => {
+      const isDark = html.classList.toggle('dark');
+      icon.textContent = isDark ? '🌙' : '☀️';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ── SCROLL FADE-IN ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
