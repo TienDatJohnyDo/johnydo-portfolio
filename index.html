@@ -381,7 +381,10 @@
   </style>
 </head>
 <body>
-
+<script>
+  // Remove 'dark' class if it exists, so default is always light
+  document.documentElement.classList.remove('dark');
+</script>
   <!-- Scroll progress -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
